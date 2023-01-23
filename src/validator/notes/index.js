@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-const InvariantError = require('../../exceptions/invariantError');
+const InvariantError = require('../../exceptions/InvariantError');
 const { NotePayloadSchema } = require('./schema');
 
 const NotesValidator = {
