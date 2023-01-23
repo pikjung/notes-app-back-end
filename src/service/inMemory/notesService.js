@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-underscore-dangle */
 const { nanoid } = require('nanoid');
-const InvariantError = require('../../exceptions/invariantError');
+const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
 class NotesService {
