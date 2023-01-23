@@ -1,15 +1,17 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { nanoid } = require('nanoid');
 const notes = require('./notes');
 
 const addNoteHandler = (request, h) => {
-  const { title, tags, body } = request.payload;
+  const { title = 'untitled', tags, body } = request.payload;
+
   const id = nanoid(16);
   const createdAt = new Date().toISOString();
   const updatedAt = createdAt;
+
   const newNote = {
     title, tags, body, id, createdAt, updatedAt,
   };
+
   notes.push(newNote);
 
   const isSuccess = notes.filter((note) => note.id === id).length > 0;
@@ -22,7 +24,6 @@ const addNoteHandler = (request, h) => {
         noteId: id,
       },
     });
-
     response.code(201);
     return response;
   }
@@ -35,7 +36,7 @@ const addNoteHandler = (request, h) => {
   return response;
 };
 
-const getAllNoteHandler = () => ({
+const getAllNotesHandler = () => ({
   status: 'success',
   data: {
     notes,
@@ -60,15 +61,14 @@ const getNoteByIdHandler = (request, h) => {
     status: 'fail',
     message: 'Catatan tidak ditemukan',
   });
-
   response.code(404);
   return response;
 };
 
 const editNoteByIdHandler = (request, h) => {
   const { id } = request.params;
+
   const { title, tags, body } = request.payload;
-  // eslint-disable-next-line new-cap
   const updatedAt = new Date().toISOString();
 
   const index = notes.findIndex((note) => note.id === id);
@@ -100,26 +100,31 @@ const editNoteByIdHandler = (request, h) => {
 
 const deleteNoteByIdHandler = (request, h) => {
   const { id } = request.params;
+
   const index = notes.findIndex((note) => note.id === id);
+
   if (index !== -1) {
     notes.splice(index, 1);
     const response = h.response({
       status: 'success',
-      message: 'Catatan berhasil di hapus',
+      message: 'Catatan berhasil dihapus',
     });
     response.code(200);
     return response;
   }
 
   const response = h.response({
-    success: 'fail',
-    message: 'Catatan gagal di hapus. Id tidak ditemukan',
+    status: 'fail',
+    message: 'Catatan gagal dihapus. Id tidak ditemukan',
   });
-
   response.code(404);
   return response;
 };
 
 module.exports = {
-  addNoteHandler, getAllNoteHandler, getNoteByIdHandler, editNoteByIdHandler, deleteNoteByIdHandler,
+  addNoteHandler,
+  getAllNotesHandler,
+  getNoteByIdHandler,
+  editNoteByIdHandler,
+  deleteNoteByIdHandler,
 };
